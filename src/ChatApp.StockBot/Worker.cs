@@ -1,5 +1,9 @@
 namespace ChatApp.StockBot;
 
+/// <summary>
+/// Bot entry point. Consumes stock quote requests and publishes replies;
+/// the message broker wiring arrives with the RabbitMQ integration.
+/// </summary>
 public class Worker : BackgroundService
 {
     private readonly ILogger<Worker> _logger;
@@ -11,13 +15,7 @@ public class Worker : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        while (!stoppingToken.IsCancellationRequested)
-        {
-            if (_logger.IsEnabled(LogLevel.Information))
-            {
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-            }
-            await Task.Delay(1000, stoppingToken);
-        }
+        _logger.LogInformation("Stock bot started.");
+        await Task.Delay(Timeout.Infinite, stoppingToken);
     }
 }
