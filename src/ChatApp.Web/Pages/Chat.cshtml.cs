@@ -1,14 +1,12 @@
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ChatApp.Web.Pages;
 
 [Authorize]
-public class IndexModel : PageModel
+public class ChatModel : PageModel
 {
-    public IActionResult OnGet()
+    public void OnGet()
     {
-        return RedirectToPage("/Chat");
     }
 }

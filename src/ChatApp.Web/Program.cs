@@ -1,4 +1,5 @@
 using ChatApp.Web.Data;
+using ChatApp.Web.Hubs;
 using ChatApp.Web.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
@@ -7,12 +8,14 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorPages();
+builder.Services.AddSignalR();
 
 builder.Services.AddDbContext<ChatDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("ChatDb")));
 
 builder.Services.AddSingleton<IPasswordHasher<AppUser>, PasswordHasher<AppUser>>();
 builder.Services.AddScoped<UserAccountService>();
+builder.Services.AddScoped<ChatMessageService>();
 
 builder.Services
     .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -31,6 +34,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapRazorPages();
+app.MapHub<ChatHub>("/hubs/chat");
 
 using (var scope = app.Services.CreateScope())
 {
