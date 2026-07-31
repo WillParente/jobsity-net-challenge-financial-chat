@@ -1,0 +1,23 @@
+@page
+@model LoginModel
+@{
+    ViewData["Title"] = "Log in";
+}
+
+<div class="auth-card">
+    <h1>Log in</h1>
+    <form method="post">
+        <label asp-for="Input.Username">Username</label>
+        <input asp-for="Input.Username" autofocus />
+
+        <label asp-for="Input.Password">Password</label>
+        <input asp-for="Input.Password" type="password" />
+
+        <button type="submit">Log in</button>
+        <div asp-validation-summary="All" class="error"></div>
+    </form>
+    <div class="alt-link">
+        No account? <a asp-page="/Register">Register</a>
+    </div>
+    <p class="hint">Demo users: <code>alice</code> / <code>bob</code>, password <code>Passw0rd!</code></p>
+</div>

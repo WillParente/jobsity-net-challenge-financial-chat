@@ -1,0 +1,22 @@
+@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="auth-card">
+    <h1>Register</h1>
+    <form method="post">
+        <label asp-for="Input.Username">Username</label>
+        <input asp-for="Input.Username" autofocus />
+
+        <label asp-for="Input.Password">Password</label>
+        <input asp-for="Input.Password" type="password" />
+
+        <button type="submit">Create account</button>
+        <div asp-validation-summary="All" class="error"></div>
+    </form>
+    <div class="alt-link">
+        Already registered? <a asp-page="/Login">Log in</a>
+    </div>
+</div>

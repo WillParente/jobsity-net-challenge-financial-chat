@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - Financial Chat</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <header class="topbar">
+        <span class="brand">Financial Chat</span>
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            <span class="user-info">
+                Signed in as <strong>@User.Identity.Name</strong>
+                <form method="post" asp-page="/Logout" class="inline-form">
+                    <button type="submit" class="link-button">Log out</button>
+                </form>
+            </span>
+        }
+    </header>
+    <main>
+        @RenderBody()
+    </main>
+</body>
+</html>

@@ -1,0 +1,74 @@
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: #f4f5f7;
+    color: #1f2430;
+}
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.6rem 1rem;
+    background: #1f2430;
+    color: #fff;
+}
+
+.topbar .brand { font-weight: 600; }
+
+.topbar .user-info { font-size: 0.9rem; }
+
+.inline-form { display: inline; }
+
+.link-button {
+    background: none;
+    border: none;
+    color: #9fc1ff;
+    cursor: pointer;
+    font: inherit;
+    margin-left: 0.5rem;
+    text-decoration: underline;
+}
+
+main { padding: 1rem; }
+
+.auth-card {
+    max-width: 22rem;
+    margin: 3rem auto;
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+}
+
+.auth-card h1 { margin-top: 0; font-size: 1.3rem; }
+
+.auth-card label { display: block; margin: 0.8rem 0 0.25rem; font-size: 0.9rem; }
+
+.auth-card input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #c8ccd4;
+    border-radius: 4px;
+    font: inherit;
+}
+
+.auth-card button[type="submit"] {
+    margin-top: 1.2rem;
+    width: 100%;
+    padding: 0.55rem;
+    background: #2657c5;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font: inherit;
+    cursor: pointer;
+}
+
+.auth-card .alt-link { margin-top: 1rem; font-size: 0.9rem; text-align: center; }
+
+.error { color: #c02b2b; font-size: 0.9rem; margin-top: 0.5rem; }
+
+.hint { color: #5a6172; font-size: 0.85rem; margin-top: 1rem; }
