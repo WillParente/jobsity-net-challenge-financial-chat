@@ -1,5 +1,7 @@
+using ChatApp.Contracts.Messaging;
 using ChatApp.Web.Data;
 using ChatApp.Web.Hubs;
+using ChatApp.Web.Messaging;
 using ChatApp.Web.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
@@ -16,6 +18,11 @@ builder.Services.AddDbContext<ChatDbContext>(options =>
 builder.Services.AddSingleton<IPasswordHasher<AppUser>, PasswordHasher<AppUser>>();
 builder.Services.AddScoped<UserAccountService>();
 builder.Services.AddScoped<ChatMessageService>();
+
+builder.Services.Configure<RabbitMqSettings>(
+    builder.Configuration.GetSection(RabbitMqSettings.SectionName));
+builder.Services.AddSingleton<IStockRequestPublisher, RabbitMqStockRequestPublisher>();
+builder.Services.AddHostedService<StockQuoteReplyConsumer>();
 
 builder.Services
     .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

@@ -1,0 +1,14 @@
+# Infrastructure only: the web app and the bot run with `dotnet run`.
+# RabbitMQ management UI: http://localhost:15672 (guest/guest, dev-only defaults).
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: financial-chat-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5

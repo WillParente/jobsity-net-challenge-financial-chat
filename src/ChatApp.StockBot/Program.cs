@@ -1,7 +1,11 @@
+using ChatApp.Contracts.Messaging;
 using ChatApp.StockBot;
 using ChatApp.StockBot.Stooq;
 
 var builder = Host.CreateApplicationBuilder(args);
+
+builder.Services.Configure<RabbitMqSettings>(
+    builder.Configuration.GetSection(RabbitMqSettings.SectionName));
 
 builder.Services.AddHttpClient<IStooqClient, StooqClient>((provider, client) =>
 {
