@@ -10,6 +10,7 @@ public class ChatDbContext : DbContext
 
     public DbSet<AppUser> Users => Set<AppUser>();
     public DbSet<ChatMessage> Messages => Set<ChatMessage>();
+    public DbSet<Room> Rooms => Set<Room>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -32,6 +33,12 @@ public class ChatDbContext : DbContext
             message.Property(m => m.TimestampUtc).HasConversion(
                 utc => utc,
                 stored => DateTime.SpecifyKind(stored, DateTimeKind.Utc));
+        });
+
+        modelBuilder.Entity<Room>(room =>
+        {
+            room.HasIndex(r => r.Name).IsUnique();
+            room.Property(r => r.Name).HasMaxLength(30);
         });
     }
 }

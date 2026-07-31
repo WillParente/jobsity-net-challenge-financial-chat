@@ -4,17 +4,28 @@
     ViewData["Title"] = "Chatroom";
 }
 
-<div class="chat-container">
-    <div class="chat-header">
-        <h1>#general</h1>
-        <span id="connection-status" class="status connecting">connecting…</span>
+<div class="chat-layout">
+    <aside class="room-sidebar">
+        <h2>Rooms</h2>
+        <ul id="room-list" class="room-list"></ul>
+        <form id="room-form" autocomplete="off">
+            <input id="room-input" maxlength="30" placeholder="new-room-name" />
+            <button type="submit">+ Create</button>
+        </form>
+    </aside>
+
+    <div class="chat-container">
+        <div class="chat-header">
+            <h1 id="room-title">#general</h1>
+            <span id="connection-status" class="status connecting">connecting…</span>
+        </div>
+        <ul id="message-list" class="message-list"></ul>
+        <form id="message-form" class="message-form" autocomplete="off">
+            <input id="message-input" maxlength="500"
+                   placeholder="Type a message, or /stock=aapl.us for a quote" />
+            <button type="submit">Send</button>
+        </form>
     </div>
-    <ul id="message-list" class="message-list"></ul>
-    <form id="message-form" class="message-form" autocomplete="off">
-        <input id="message-input" maxlength="500"
-               placeholder="Type a message, or /stock=aapl.us for a quote" />
-        <button type="submit">Send</button>
-    </form>
 </div>
 
 <script src="~/lib/signalr/signalr.min.js"></script>

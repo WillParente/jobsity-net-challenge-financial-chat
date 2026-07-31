@@ -18,6 +18,7 @@ builder.Services.AddDbContext<ChatDbContext>(options =>
 builder.Services.AddSingleton<IPasswordHasher<AppUser>, PasswordHasher<AppUser>>();
 builder.Services.AddScoped<UserAccountService>();
 builder.Services.AddScoped<ChatMessageService>();
+builder.Services.AddScoped<RoomService>();
 
 builder.Services.Configure<RabbitMqSettings>(
     builder.Configuration.GetSection(RabbitMqSettings.SectionName));

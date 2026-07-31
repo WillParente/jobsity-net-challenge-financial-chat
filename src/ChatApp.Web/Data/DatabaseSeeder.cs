@@ -18,6 +18,11 @@ public static class DatabaseSeeder
     {
         dbContext.Database.EnsureCreated();
 
+        if (!dbContext.Rooms.Any(r => r.Name == Services.RoomService.DefaultRoom))
+        {
+            dbContext.Rooms.Add(new Room { Name = Services.RoomService.DefaultRoom });
+        }
+
         foreach (var (username, password) in DemoUsers)
         {
             if (dbContext.Users.Any(u => u.Username == username))

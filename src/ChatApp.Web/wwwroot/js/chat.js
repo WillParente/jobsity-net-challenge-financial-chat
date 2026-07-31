@@ -1,14 +1,20 @@
 "use strict";
 
 (function () {
-    const ROOM = "general";
+    const DEFAULT_ROOM = "general";
+    let currentRoom = DEFAULT_ROOM;
 
     const messageList = document.getElementById("message-list");
     const messageForm = document.getElementById("message-form");
     const messageInput = document.getElementById("message-input");
     const statusLabel = document.getElementById("connection-status");
+    const roomList = document.getElementById("room-list");
+    const roomForm = document.getElementById("room-form");
+    const roomInput = document.getElementById("room-input");
+    const roomTitle = document.getElementById("room-title");
 
     const renderedIds = new Set();
+    const knownRooms = new Set();
 
     const connection = new signalR.HubConnectionBuilder()
         .withUrl("/hubs/chat")
@@ -56,13 +62,55 @@
         history.forEach(renderMessage);
     }
 
-    async function joinRoom() {
-        const history = await connection.invoke("JoinRoom", ROOM);
+    function renderRoomList() {
+        roomList.replaceChildren();
+        [...knownRooms].sort().forEach(function (room) {
+            const item = document.createElement("li");
+            const button = document.createElement("button");
+            button.type = "button";
+            button.textContent = "#" + room;
+            button.className = room === currentRoom ? "room current" : "room";
+            button.addEventListener("click", function () { switchRoom(room); });
+            item.appendChild(button);
+            roomList.appendChild(item);
+        });
+    }
+
+    async function joinRoom(room) {
+        const history = await connection.invoke("JoinRoom", room);
+        currentRoom = room;
+        roomTitle.textContent = "#" + room;
+        knownRooms.add(room);
+        renderRoomList();
         renderHistory(history);
         setStatus("online", "online");
     }
 
+    async function switchRoom(room) {
+        if (room === currentRoom) {
+            return;
+        }
+        try {
+            await connection.invoke("LeaveRoom", currentRoom);
+            await joinRoom(room);
+        } catch (err) {
+            console.error(err);
+        }
+        messageInput.focus();
+    }
+
+    async function loadRooms() {
+        const rooms = await connection.invoke("GetRooms");
+        rooms.forEach(function (room) { knownRooms.add(room); });
+        renderRoomList();
+    }
+
     connection.on("ReceiveMessage", renderMessage);
+
+    connection.on("RoomCreated", function (room) {
+        knownRooms.add(room);
+        renderRoomList();
+    });
 
     connection.onreconnecting(function () {
         setStatus("reconnecting…", "connecting");
@@ -71,7 +119,8 @@
     // Group membership is lost with the connection: rejoin and re-render
     // the history so nothing is missing after a network hiccup.
     connection.onreconnected(function () {
-        joinRoom().catch(console.error);
+        loadRooms().catch(console.error);
+        joinRoom(currentRoom).catch(console.error);
     });
 
     connection.onclose(function () {
@@ -84,13 +133,24 @@
         if (text.length === 0) {
             return;
         }
-        connection.invoke("SendMessage", ROOM, text).catch(console.error);
+        connection.invoke("SendMessage", currentRoom, text).catch(console.error);
         messageInput.value = "";
         messageInput.focus();
     });
 
+    roomForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+        const room = roomInput.value.trim().toLowerCase();
+        if (room.length === 0) {
+            return;
+        }
+        roomInput.value = "";
+        switchRoom(room).catch(console.error);
+    });
+
     connection.start()
-        .then(joinRoom)
+        .then(loadRooms)
+        .then(function () { return joinRoom(DEFAULT_ROOM); })
         .catch(function (err) {
             console.error(err);
             setStatus("connection failed", "offline");
